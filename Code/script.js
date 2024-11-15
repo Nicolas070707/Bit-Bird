@@ -1,122 +1,196 @@
 // Hole das Canvas-Element und setze den 2D-Kontext
-var canvas = document.getElementById('gameCanvas');
-var ctx = canvas.getContext('2d');
+var canvas = document.getElementById("gameCanvas");
+var ctx = canvas.getContext("2d");
 
 // Block-Eigenschaften
 var block = {
-    x: 50,  // Startposition X
-    y: 50,  // Startposition Y
-    size: 30, // Größe des Blocks
-    speed: 5, // Geschwindigkeit der Bewegung
-    velocityY: 0, // Vertikale Geschwindigkeit
-    gravity: 0.2, // Stärke der Gravitation
-    jumpStrength: -5 // Sprungstärke
+  x: 50,
+  y: canvas.height - 290,
+  size: 30,
+  speed: 5,
+  velocityY: 0,
+  gravity: 0.5  ,
+  jumpStrength: -7,
 };
 
-var isGameOver = false; // Game Over Status
+var score = 0;
+var isGameOver = false;
+
+// Röhreneigenschaften
+var pipes = [];
+var pipeWidth = 70;
+var pipeGap = 150;
+var pipeSpeed = 2;
 
 // Erstelle den Restart-Button
-var restartButton = document.createElement('button');
-restartButton.innerHTML = 'Restart';
-restartButton.style.position = 'absolute';
-restartButton.style.top = '60%';
-restartButton.style.left = '50%';
-restartButton.style.transform = 'translate(-50%, -50%)';
-restartButton.style.padding = '10px 20px';
-restartButton.style.fontSize = '16px';
-restartButton.style.display = 'none'; // Startet als unsichtbar
+var restartButton = document.createElement("button");
+restartButton.innerHTML = "Restart";
+restartButton.style.position = "absolute";
+restartButton.style.top = "60%";
+restartButton.style.left = "50%";
+restartButton.style.transform = "translate(-50%, -50%)";
+restartButton.style.padding = "10px 20px";
+restartButton.style.fontSize = "16px";
+restartButton.style.display = "none";
 document.body.appendChild(restartButton);
 
 // Erstelle den Highscore-Button
-var highscoreButton = document.createElement('button'); // Korrektur der Variablenname
-highscoreButton.innerHTML = 'Share Highscore';
-highscoreButton.style.position = 'absolute';
-highscoreButton.style.top = '70%';  // Position leicht nach unten verschieben
-highscoreButton.style.left = '50%';
-highscoreButton.style.transform = 'translate(-50%, -50%)';
-highscoreButton.style.padding = '10px 20px';
-highscoreButton.style.fontSize = '16px';
-highscoreButton.style.display = 'none'; // Startet als unsichtbar
+var highscoreButton = document.createElement("button");
+highscoreButton.innerHTML = "Share Highscore";
+highscoreButton.style.position = "absolute";
+highscoreButton.style.top = "70%";
+highscoreButton.style.left = "50%";
+highscoreButton.style.transform = "translate(-50%, -50%)";
+highscoreButton.style.padding = "10px 20px";
+highscoreButton.style.fontSize = "16px";
+highscoreButton.style.display = "none";
 document.body.appendChild(highscoreButton);
 
 // Zeichne den Block
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Lösche das Canvas, um das Bild zu aktualisieren
+function drawBlock() {
+  ctx.fillStyle = "blue";
+  ctx.fillRect(block.x, block.y, block.size, block.size);
+}
 
-    // Wenn das Spiel vorbei ist, zeige die Game Over Nachricht und den Restart-Button
-    if (isGameOver) {
-        displayGameOver();
-        return;
-    }
-
-    // Zeichne den Block
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(block.x, block.y, block.size, block.size);
+// Zeichne den Score
+function drawScore() {
+  ctx.fillStyle = "black";
+  ctx.font = "40px Arial";
+  ctx.fillText(score, 135, 50);
 }
 
 // Bewege den Block basierend auf den Tasten
 function moveBlock(event) {
-    if (isGameOver) return; // Blockiere Eingaben, wenn das Spiel vorbei ist
-
-    if (event.key === ' ') {  // Leertaste für den Sprung
-        block.velocityY = block.jumpStrength;
-    }
-    if (event.key === 'ArrowLeft') {
-        block.x -= block.speed;
-    }
-    if (event.key === 'ArrowRight') {
-        block.x += block.speed;
-    }
+  if (isGameOver) return;
+  if (event.key === " ") {
+    // Leertaste für den Sprung
+    block.velocityY = block.jumpStrength;
+  }
 }
 
-// Kollisionsüberprüfung zwischen Block und Bildschirmrändern
+// Kollisionsüberprüfung zwischen Block und Bildschirmrändern und Röhren
 function checkCollision() {
-    // Prüfe, ob der Block den unteren Rand erreicht (Game Over)
-    if (block.y + block.size > canvas.height) {
+  if (block.y + block.size > canvas.height || block.y < 0) {
+    isGameOver = true;
+  }
+
+  // Kollision mit den Röhren
+  for (var i = 0; i < pipes.length; i++) {
+    var pipe = pipes[i];
+
+    if (block.x < pipe.x + pipeWidth && block.x + block.size > pipe.x) {
+      if (block.y < pipe.gapY || block.y + block.size > pipe.gapY + pipeGap) {
         isGameOver = true;
+        break;
+      }
     }
+  }
+}
+
+// Erstelle eine neue Röhre mit einer sicheren Lücke
+function createPipe() {
+  var maxPipeY = canvas.height - pipeGap - 50;
+  var gapPosition = Math.floor(Math.random() * maxPipeY) + 25;
+  pipes.push({
+    x: canvas.width,
+    gapY: gapPosition,
+    passed: false,
+  });
+}
+
+// Röhren aktualisieren
+function updatePipes() {
+  for (var i = 0; i < pipes.length; i++) {
+    var pipe = pipes[i];
+    pipe.x -= pipeSpeed;
+
+    // Erhöhe die Punktzahl, wenn der Block eine Röhre passiert hat
+    if (!pipe.passed && pipe.x + pipeWidth < block.x) {
+      score++;
+      pipe.passed = true;
+    }
+  }
+
+  // Entferne Röhren, die den linken Rand des Canvas verlassen haben
+  if (pipes.length > 0 && pipes[0].x + pipeWidth < 0) {
+    pipes.shift();
+  }
+
+  // Füge neue Röhren hinzu, wenn nötig
+  if (pipes.length < 1 || pipes[pipes.length - 1].x < canvas.width - 200) {
+    createPipe();
+  }
+}
+
+// Röhren zeichnen
+function drawPipes() {
+  ctx.fillStyle = "green";
+  for (var i = 0; i < pipes.length; i++) {
+    var pipe = pipes[i];
+
+    ctx.fillRect(pipe.x, 0, pipeWidth, pipe.gapY);
+
+    ctx.fillRect(
+      pipe.x,
+      pipe.gapY + pipeGap,
+      pipeWidth,
+      canvas.height - pipe.gapY - pipeGap
+    );
+  }
 }
 
 // Game Over Nachricht anzeigen
 function displayGameOver() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Canvas leeren
-    ctx.fillStyle = 'Red'; // Textfarbe
-    ctx.font = '30px Arial'; // Schriftart und -größe
-    ctx.textAlign = 'center'; // Zentrierter Text
-    ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2); // Nachricht
+  ctx.fillStyle = "Red";
+  ctx.font = "30px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
 
-    // Zeige den Restart-Button
-    restartButton.style.display = 'block';
-    // Zeige den Highscore-Button
-    highscoreButton.style.display = 'block';
+  restartButton.style.display = "block";
+  highscoreButton.style.display = "block";
 }
 
 // Restart-Button Funktionalität
-restartButton.addEventListener('click', function() {
-    isGameOver = false; // Spiel auf aktiv setzen
-    block.x = 50; // Zurücksetzen der Blockposition
-    block.y = 50;
-    block.velocityY = 0; // Geschwindigkeit zurücksetzen
-    restartButton.style.display = 'none'; // Button ausblenden
-    highscoreButton.style.display = 'none'; // Highscore-Button ausblenden
-    update(); // Starten des Spiels
+restartButton.addEventListener("click", function () {
+  isGameOver = false;
+  block.x = 50;
+  block.y = canvas.height - 290;
+  block.velocityY = 0;
+  pipes = [];
+  score = 0;
+  restartButton.style.display = "none";
+  highscoreButton.style.display = "none";
+  createPipe();
+  updateGame();
 });
 
-// Update- und Schwerkraft-Logik
-function update() {
-    if (isGameOver) return; // Stoppe das Update, wenn das Spiel vorbei ist
+// Spiel-Update-Funktion
+function updateGame() {
+  if (isGameOver) {
+    displayGameOver();
+    return;
+  }
 
-    // Schwerkraft zur vertikalen Geschwindigkeit hinzufügen
-    block.velocityY += block.gravity;
-    block.y += block.velocityY;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    checkCollision(); // Prüfe Kollision mit den Rändern
-    draw(); // Zeichne das Canvas neu
-    requestAnimationFrame(update); // Loop
+  // Update und Zeichnen der Röhren
+  updatePipes();
+  drawPipes();
+
+  // Block-Logik
+  block.velocityY += block.gravity;
+  block.y += block.velocityY;
+  drawBlock();
+
+  // Zeichne die Punktzahl
+  drawScore();
+
+  checkCollision();
+
+  requestAnimationFrame(updateGame);
 }
 
-// Event Listener für Tastatur-Input
-window.addEventListener('keydown', moveBlock);
+window.addEventListener("keydown", moveBlock);
 
-// Start der Animation
-update();
+createPipe();
+updateGame();
