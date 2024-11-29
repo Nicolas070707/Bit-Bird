@@ -4,16 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Firebase Signup</title>
-  <script type="module" src="sign.mjs" defer></script>
+  <script type="module" src="../script/sign.mjs" defer></script>
+  <link rel="stylesheet" href="../style/sign.css">
 </head>
 <body>
-  <div>
+  <div class="login-container">
     <h1>Sign Up</h1>
     <form id="signup-form">
       <input type="text" id="nickname" placeholder="Nickname" required />
       <input type="password" id="password" placeholder="Password" required />
       <input type="password" id="confirm_password" placeholder="Confirm Password" required />
-      <button type="submit">Sign Up</button>
+      <button  class="button-52" type="submit"  >Sign Up</button>
+      <button class="button-52" onclick="window.location.href='../index.html'" >Back to Login</button>
     </form>
   </div>
 </body>
