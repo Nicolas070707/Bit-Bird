@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -11,12 +12,27 @@
   <div class="login-container">
     <h1>Sign Up</h1>
     <form id="signup-form">
-      <input type="text" id="nickname" placeholder="Nickname" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <input type="password" id="confirm_password" placeholder="Confirm Password" required />
-      <button  class="button-52" type="submit"  >Sign Up</button>
+      <div>
+        <label for="email">E-Mail:</label>
+        <input type="email" id="email" name="email" required placeholder="Deine E-Mail">
+      </div>
+      <div>
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" name="password" required placeholder="Dein Passwort">
+      </div>
+      <div>
+        <label for="username">Benutzername:</label>
+        <input type="text" id="username" name="username" required placeholder="Dein Benutzername">
+      </div>
+  
+      <div>
+        <button type="submit">Registrieren</button>
+      </div>
       <button class="button-52" onclick="window.location.href='../index.html'" >Back to Login</button>
+    
     </form>
+   
+     
   </div>
 </body>
 </html>

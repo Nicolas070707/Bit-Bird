@@ -1,7 +1,7 @@
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -13,43 +13,38 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const auth = getAuth(app);
+const database = getDatabase(app);
 
-// Function to write user data
-function writeUserData(nickname, password) {
-  const reference = ref(db, "users/" + nickname);
-  set(reference, {
-    username: nickname,
-    password: password,
-    score: 0
-  })
-  .then(() => {
-    alert("User successfully registered!");
-  })
-  .catch((error) => {
-    console.error("Error writing data:", error);
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById("signup-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const username = document.getElementById("username").value;
+
+    if (!email || !password || !username) {
+      alert("Bitte alle Felder ausfüllen!");
+      return;
+    }
+
+    try {
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await set(ref(database, 'users/' + user.uid), {
+        username: username,
+        email: email,
+      });
+
+      alert("Registrierung erfolgreich!");
+      window.location.href = "./login.html"; 
+    } catch (error) {
+      console.error("Fehler bei der Registrierung:", error);
+      alert("Fehler bei der Registrierung. Bitte versuche es später noch einmal.");
+    }
   });
-}
-
-// Handle form submission
-document.getElementById("signup-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const nickname = document.getElementById("nickname").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirm_password").value;
-
-  if (!nickname || !password || !confirmPassword) {
-    alert("Please fill out all fields!");
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    alert("Passwords do not match!");
-    return;
-  }
-
-  writeUserData(nickname, password);
 });

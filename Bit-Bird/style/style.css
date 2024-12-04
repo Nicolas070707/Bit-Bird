@@ -34,6 +34,8 @@ h1 {
 
 .sides{
   border-style: solid;
-  height: 512px;
-  width: 400px;
+    height: 512px;
+    width: 400px;
+    justify-items: center;
+    padding-top: 20px;
 }

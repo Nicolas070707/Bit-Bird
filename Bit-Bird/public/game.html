@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bit_Bird</title>
     <link rel="stylesheet" href="../style/style.css">
-    <script src="../script/game.js" defer></script> 
+    <script src="../script/game.js"type="module" defer></script> 
+    <script src="../script/score.js" defer type="module"></script>
 
 </head>
 <body>
@@ -13,7 +14,8 @@
         <h1>Bit-Bird</h1>
     </div>
 <div class="main">
-    <div class="sides">
+    <div class="sides" id="score-display">
+        loading scores....
     </div>
     <canvas class="Gamebase" id="gameCanvas" width="288px" height="512px"></canvas>
     <div class="sides">

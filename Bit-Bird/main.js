@@ -1,5 +1,6 @@
+import {getAuth, signInWithEmailAndPassword,} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import {getDatabase, ref, get,} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -12,48 +13,47 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
 
-
-// Firebase initialisieren
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const database = getDatabase(app);
 
-// Funktion für die Benutzerüberprüfung
-async function checkLogin(username, password) {
-  const userRef = ref(database, "users/" + username);
+document.addEventListener("DOMContentLoaded", () => {
+  document
+    .getElementById("login-form")
+    .addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-  // Benutzerinformationen aus Firebase abrufen
-  const snapshot = await get(userRef);
-  if (!snapshot.exists()) {
-    alert("Benutzername existiert nicht!");
-    return false;
-  }
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-  const userData = snapshot.val();
+      if (!email || !password) {
+        alert("Bitte alle Felder ausfüllen!");
+        return;
+      }
 
-  // Passwort prüfen
-  if (userData.password === password) {
-    return true;
-  } else {
-    alert("Falsches Passwort!");
-    return false;
-  }
-}
+      try {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredential.user;
 
-// Event-Listener für das Login-Formular
-document.getElementById("login-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
+        const userRef = ref(database, "users/" + user.uid);
+        const snapshot = await get(userRef);
 
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          console.log("Benutzerdaten:", userData);
 
-  if (!username || !password) {
-    alert("Bitte alle Felder ausfüllen!");
-    return;
-  }
-
-  const loginSuccessful = await checkLogin(username, password);
-
-  if (loginSuccessful) {
-    window.location.href = "./game.html";
-  }
+          alert("Login erfolgreich!");
+          window.location.href = "./game.html";
+        } else {
+          alert("Benutzer existiert nicht in der Datenbank.");
+        }
+      } catch (error) {
+        console.error("Fehler bei der Anmeldung:", error);
+        alert("Falsche E-Mail oder Passwort. Bitte versuche es erneut.");
+      }
+    });
 });
