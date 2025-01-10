@@ -1,6 +1,6 @@
-import {getAuth, signInWithEmailAndPassword,} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import {getDatabase, ref, get,} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -18,42 +18,54 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("login-form")
-    .addEventListener("submit", async (event) => {
-      event.preventDefault();
+  // Login-Formular
+  document.getElementById("login-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-      if (!email || !password) {
-        alert("Bitte alle Felder ausfüllen!");
-        return;
+    if (!email || !password) {
+      alert("Bitte alle Felder ausfüllen!");
+      return;
+    }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const userRef = ref(database, "users/" + user.uid);
+      const snapshot = await get(userRef);
+
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        console.log("Benutzerdaten:", userData);
+
+        alert("Login erfolgreich!");
+        window.location.href = "./game.html";
+      } else {
+        alert("Benutzer existiert nicht in der Datenbank.");
       }
+    } catch (error) {
+      console.error("Fehler bei der Anmeldung:", error);
+      alert("Falsche E-Mail oder Passwort. Bitte versuche es erneut.");
+    }
+  });
 
-      try {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        const user = userCredential.user;
+  // Passwort vergessen - Link
+  document.getElementById("forgot-password-link").addEventListener("click", (event) => {
+    event.preventDefault();
+    const email = prompt("Bitte gib deine E-Mail-Adresse ein:");
 
-        const userRef = ref(database, "users/" + user.uid);
-        const snapshot = await get(userRef);
-
-        if (snapshot.exists()) {
-          const userData = snapshot.val();
-          console.log("Benutzerdaten:", userData);
-
-          alert("Login erfolgreich!");
-          window.location.href = "./game.html";
-        } else {
-          alert("Benutzer existiert nicht in der Datenbank.");
-        }
-      } catch (error) {
-        console.error("Fehler bei der Anmeldung:", error);
-        alert("Falsche E-Mail oder Passwort. Bitte versuche es erneut.");
-      }
-    });
+    if (email) {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          alert("Falls diese E-Mail-Adresse existiert, wirst du eine Nachricht zum Zurücksetzen des Passworts erhalten.");
+        })
+        .catch((error) => {
+          console.error("Fehler beim Zurücksetzen des Passworts:", error);
+          alert("Fehler beim Zurücksetzen des Passworts. Bitte versuche es später noch einmal.");
+        });
+    }
+  });
 });

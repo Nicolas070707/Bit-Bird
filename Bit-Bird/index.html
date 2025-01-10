@@ -1,39 +1,58 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <!-- Firebase Module Scripts -->
-  <script type="module" src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
-  <script type="module" src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
-  <script type="module" src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"></script>
-  <!-- Dein Login-Skript -->
-  <script type="module" src="main.js" defer></script>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="login-container">
-    <h1>Login</h1>
-    <form id="login-form">
-      <div>
-        <label for="email">E-Mail:</label>
-        <input type="email" id="email" placeholder="E-Mail" required />
-      </div>
-      <div>
-        <label for="password">Passwort:</label>
-        <input type="password" id="password" placeholder="Passwort" required />
-      </div>
-      <button class="button-52" type="submit">Login</button>
-      <button
-        onclick="window.location.href='./sign.html'"
-        type="button"
-        class="button-52"
-        role="button"
-      >
-        Registrieren
-      </button>
-    </form>
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <!-- Firebase Module Scripts -->
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"
+    ></script>
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"
+    ></script>
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"
+    ></script>
+    <!-- Dein Login-Skript -->
+    <script type="module" src="main.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <h1>LOGIN</h1>
+      <form id="login-form">
+        <div>
+          <input type="email" id="email" placeholder="E-Mail" required />
+        </div>
+        <div>
+          <input
+            type="password"
+            id="password"
+            placeholder="Passwort"
+            required
+          />
+        </div>
+        <div>
+          <button class="button-52" type="submit">Login</button>
+          <button
+            onclick="window.location.href='./sign.html'"
+            type="button"
+            class="button-52"
+            role="button"
+          >
+            Registrieren
+          </button>
+        </div>
+        <a
+          onclick="window.location.href='./password_reset.html'"
+          style="font-weight: 1800" style="color: white;"
+          >forgot password</a
+        >
+      </form>
+    </div>
+  </body>
 </html>

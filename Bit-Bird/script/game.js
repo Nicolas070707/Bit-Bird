@@ -49,16 +49,7 @@ restartButton.style.fontSize = "16px";
 restartButton.style.display = "none";
 document.body.appendChild(restartButton);
 
-var highscoreButton = document.createElement("button");
-highscoreButton.innerHTML = "Share Highscore";
-highscoreButton.style.position = "absolute";
-highscoreButton.style.top = "70%";
-highscoreButton.style.left = "50%";
-highscoreButton.style.transform = "translate(-50%, -50%)";
-highscoreButton.style.padding = "10px 20px";
-highscoreButton.style.fontSize = "16px";
-highscoreButton.style.display = "none";
-document.body.appendChild(highscoreButton);
+
 
 function drawBlock() {
   ctx.fillStyle = "blue";
@@ -122,7 +113,7 @@ function displayGameOver(userId) {
   }
 
   restartButton.style.display = "block";
-  highscoreButton.style.display = "block";
+  
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -131,13 +122,6 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     userId = user.uid;  
     console.log(`User logged in with userId: ${userId}`);
-
-    highscoreButton.addEventListener("click", function () {
-      if (isGameOver) {
-        saveHighestScore(userId, score); 
-        alert("Your score has been shared!");
-      }
-    });
 
    
     if (isGameOver) {
@@ -228,7 +212,6 @@ restartButton.addEventListener("click", function () {
   pipes = [];
   score = 0;
   restartButton.style.display = "none";
-  highscoreButton.style.display = "none";
   createPipe();
   updateGame();
 });
