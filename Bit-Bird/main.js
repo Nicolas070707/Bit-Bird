@@ -52,20 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Passwort vergessen - Link
-  document.getElementById("forgot-password-link").addEventListener("click", (event) => {
-    event.preventDefault();
-    const email = prompt("Bitte gib deine E-Mail-Adresse ein:");
-
-    if (email) {
-      sendPasswordResetEmail(auth, email)
-        .then(() => {
-          alert("Falls diese E-Mail-Adresse existiert, wirst du eine Nachricht zum Zurücksetzen des Passworts erhalten.");
-        })
-        .catch((error) => {
-          console.error("Fehler beim Zurücksetzen des Passworts:", error);
-          alert("Fehler beim Zurücksetzen des Passworts. Bitte versuche es später noch einmal.");
-        });
-    }
-  });
+ 
+ 
+ 
 });

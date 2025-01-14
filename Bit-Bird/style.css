@@ -2,7 +2,7 @@
 
 body {
   display: flex;
-  background-image: url(../Bit-Bird/Logo6.png);
+  background-image: url(Logo6.png);
   background-repeat: no-repeat;
   background-size:  100%;
   background-image: center;
@@ -33,24 +33,23 @@ body {
 .login-container input[type="email"],
 .login-container input[type="password"] {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
+  padding: 8px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
-  font-size:10px;
+  font-size:14px;
   font-family: "Pixelify Sans", serif;
 }
 
 .button-52 {
-  font-size: 10px;
-  font-size: large;
+  font-size: 14px;
   letter-spacing: 1px;
   padding: 5px 10px 10px;
   outline: 0;
   border: 1px solid black;
-  margin-bottom: 20px;
   background-color: black;
+  margin-bottom: 5px;
   color: white;
   font-family: "Pixelify Sans", serif;
   border-radius: 8px;
@@ -58,8 +57,9 @@ body {
 
 .button-52:hover{
   color: yellow;
-  
+  cursor: pointer;
 }
+
     
 .buttons {
   display: flex;
@@ -68,6 +68,7 @@ body {
 }
 
 a {
+  font-size: 14px;
   display: inline-block;
   padding: 3px;
   color: white; /* Textfarbe */
@@ -78,4 +79,5 @@ a {
 
 a:hover {
   color: Yellow; /* Hover-Effekt */
+  cursor: pointer;
 }
