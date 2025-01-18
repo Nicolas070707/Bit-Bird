@@ -2,7 +2,7 @@
 
 body {
   display: flex;
-  background-image: url(Logo6.png);
+  background-image: url(/Texturen/Logo6.png);
   background-repeat: no-repeat;
   background-size:  100%;
   background-image: center;
@@ -11,15 +11,14 @@ body {
 }
 
 .login-container {
-  padding: 40px;
   border-radius: 10px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0);
-  height: 380px;
-  width: 380px;
+  box-shadow: 0px 0px 20px rgba(0, 0,0, 0);
+  height: auto;
+  width: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  margin-top: 5%;
 }
 
 .login-container h1 {
@@ -71,13 +70,36 @@ a {
   font-size: 14px;
   display: inline-block;
   padding: 3px;
-  color: white; /* Textfarbe */
+  color: white; 
   font-family: "Pixelify Sans", serif;
   background-color: black;
   border-radius: 4px;
 }
 
 a:hover {
-  color: Yellow; /* Hover-Effekt */
+  color: Yellow; 
   cursor: pointer;
 }
+
+.message-box {
+  opacity: 0;
+  background-color: black;
+  transition: opacity 0.5s ease; 
+  display: none; 
+  border-radius: 4px;
+  margin: 3px;
+  padding: 3px;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "Pixelify Sans", serif;
+}
+
+.message-box.show {
+  display: block; 
+  opacity: 1; 
+}
+
+.message-box.hide {
+  opacity: 0; 
+}
+

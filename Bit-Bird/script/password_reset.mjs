@@ -1,12 +1,12 @@
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
 import {
   getDatabase,
   ref,
-  set,
+  get,
+  query,
+  orderByChild,
+  equalTo,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -25,48 +25,43 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Registrierungsformular
   document
-    .getElementById("signup-form")
+    .getElementById("reset-form")
     .addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const username = document.getElementById("username").value;
 
-      if (!email || !password || !username) {
-        showMessage("Bitte alle Felder ausfüllen!", "error");
+      if (!email) {
+        showMessage("Please enter your email address", "error");
         return;
       }
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        const user = userCredential.user;
+        const usersRef = ref(database, "users");
+        const emailQuery = query(usersRef, orderByChild("email"), equalTo(email));
+        const snapshot = await get(emailQuery);
 
-        await set(ref(database, "users/" + user.uid), {
-          username: username,
-          email: email,
-        });
+        if (!snapshot.exists()) {
+          showMessage("Email does not exist in the database.", "error");
+          return;
+        }
 
-        showMessage("Registration successful", "success");
+        await sendPasswordResetEmail(auth, email);
+        showMessage("Password reset link was sent.", "success");
 
         setTimeout(() => {
           window.location.href = "./login.html";
         }, 3000);
       } catch (error) {
-        console.error("Fehler bei der Registrierung:", error);
+        console.error("Fehler beim Zurücksetzen des Passworts:", error);
 
-        if (error.code === "auth/email-already-in-use") {
-          showMessage("Email is already in use", "error");
-        } else if (error.code === "auth/weak-password") {
-          showMessage("Password is too weak", "error");
+        if (error.code === "auth/user-not-found") {
+          showMessage("Diese E-Mail ist nicht registriert.", "error");
+        } else if (error.code === "auth/invalid-email") {
+          showMessage("Invalid email address", "error");
         } else {
-          showMessage("Registration error", "error");
+          showMessage("Failed to reset password", "error");
         }
       }
     });
