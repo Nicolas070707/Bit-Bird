@@ -17,232 +17,135 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
 
-var canvas = document.getElementById("gameCanvas");
-var ctx = canvas.getContext("2d");
+// Flappy Bird implementation with a customizable background, pipes, and bird
 
-var block = {
-  x: 50,
-  y: canvas.height - 290,
-  size: 30,
-  speed: 5,
-  velocityY: 0,
-  gravity: 0.5,
-  jumpStrength: -7,
-};
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = 800;
+canvas.height = 600;
+document.body.appendChild(canvas);
 
-var score = 0;
-var isGameOver = false;
+// Customizable assets
+const backgroundImg = new Image();
+backgroundImg.src = 'path_to_background_image'; // Replace with your uploaded background image
 
-var pipes = [];
-var pipeWidth = 70;
-var pipeGap = 150;
-var pipeSpeed = 2;
+const birdImg = new Image();
+birdImg.src = 'path_to_bird_image.png';
 
-var restartButton = document.createElement("button");
-restartButton.innerHTML = "Restart";
-restartButton.style.position = "absolute";
-restartButton.style.top = "60%";
-restartButton.style.left = "50%";
-restartButton.style.transform = "translate(-50%, -50%)";
-restartButton.style.padding = "10px 20px";
-restartButton.style.fontSize = "16px";
-restartButton.style.display = "none";
-document.body.appendChild(restartButton);
+const pipeTopImg = new Image();
+pipeTopImg.src = 'path_to_pipe_top_image.png';
 
+const pipeBottomImg = new Image();
+pipeBottomImg.src = 'path_to_pipe_bottom_image.png';
 
+const scoreBoxImg = new Image();
+scoreBoxImg.src = '/mnt/data/Logo5-1.png.png'; // Replace with the uploaded score box
 
-function drawBlock() {
-  ctx.fillStyle = "blue";
-  ctx.fillRect(block.x, block.y, block.size, block.size);
+// Game variables
+let bird = { x: 150, y: 200, width: 40, height: 30, gravity: 0.5, lift: -10, velocity: 0 };
+let pipes = [];
+let pipeInterval = 1500; // Time between pipes in ms
+let lastPipeTime = Date.now();
+let gameRunning = true;
+let score = 0;
+
+// Utility function to check collision
+function isColliding(a, b) {
+  return (
+    a.x < b.x + b.width &&
+    a.x + a.width > b.x &&
+    a.y < b.y + b.height &&
+    a.y + a.height > b.y
+  );
 }
 
-
-function drawScore() {
-  ctx.fillStyle = "black";
-  ctx.font = "40px Arial";
-  ctx.fillText(score, 135, 50);
-}
-
-
-function saveHighestScore(userId, newScore) {
-  const scoreRef = ref(db, `users/${userId}/score`);  
-
-  get(scoreRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const currentScore = snapshot.val();
-
-        if (newScore > currentScore) {
-          set(scoreRef, newScore)
-            .then(() => {
-              console.log("Neuer Highscore gespeichert!");
-            })
-            .catch((error) => {
-              console.error("Fehler beim Speichern des Highscores:", error);
-            });
-        } else {
-          console.log("Aktueller Highscore ist höher oder gleich. Kein Update erforderlich.");
-        }
-      } else {
-        set(scoreRef, newScore)
-          .then(() => {
-            console.log("Score erfolgreich zum ersten Mal gespeichert!");
-          })
-          .catch((error) => {
-            console.error("Fehler beim Speichern des Scores:", error);
-          });
-      }
-    })
-    .catch((error) => {
-      console.error("Fehler beim Abrufen des aktuellen Scores:", error);
-    });
-}
-
-
-function displayGameOver(userId) {
-  ctx.fillStyle = "Red";
-  ctx.font = "30px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
-
-  if (userId) {
-    console.log(`Game Over! Current score: ${score}. Saving high score for user: ${userId}.`);
-    saveHighestScore(userId, score); 
-  } else {
-    console.log("Kein Benutzer eingeloggt. Highscore wird nicht gespeichert.");
-  }
-
-  restartButton.style.display = "block";
-  
-}
-
-onAuthStateChanged(auth, (user) => {
-  let userId = null;
-
-  if (user) {
-    userId = user.uid;  
-    console.log(`User logged in with userId: ${userId}`);
-
-   
-    if (isGameOver) {
-      console.log(`Game Over! Current score: ${score}. Saving high score for user: ${userId}.`);
-      saveHighestScore(userId, score); 
-    }
-
-  } else {
-    console.log("No user is logged in.");
-  }
-
- 
-  if (isGameOver) {
-    displayGameOver(userId);
-  }
-});
-
-
-function moveBlock(event) {
-  if (isGameOver) return;
-  if (event.key === " ") {
-    block.velocityY = block.jumpStrength;
-  }
-}
-
-function checkCollision() {
-  if (block.y + block.size > canvas.height || block.y < 0) {
-    isGameOver = true;
-  }
-
-  for (var i = 0; i < pipes.length; i++) {
-    var pipe = pipes[i];
-
-    if (block.x < pipe.x + pipeWidth && block.x + block.size > pipe.x) {
-      if (block.y < pipe.gapY || block.y + block.size > pipe.gapY + pipeGap) {
-        isGameOver = true;
-        break;
-      }
-    }
-  }
-}
-
+// Create pipes
 function createPipe() {
-  var maxPipeY = canvas.height - pipeGap - 50;
-  var gapPosition = Math.floor(Math.random() * maxPipeY) + 25;
+  const pipeGap = 150;
+  const pipeWidth = 60;
+  const pipeY = Math.random() * (canvas.height - pipeGap - 200) + 100;
   pipes.push({
     x: canvas.width,
-    gapY: gapPosition,
-    passed: false,
+    y: pipeY,
+    width: pipeWidth,
+    height: canvas.height,
   });
 }
 
-function updatePipes() {
-  for (var i = 0; i < pipes.length; i++) {
-    var pipe = pipes[i];
-    pipe.x -= pipeSpeed;
+// Game loop
+function update() {
+  if (!gameRunning) return;
 
-    if (!pipe.passed && pipe.x + pipeWidth < block.x) {
-      score++;
-      pipe.passed = true;
-    }
+  // Bird physics
+  bird.velocity += bird.gravity;
+  bird.y += bird.velocity;
+
+  if (bird.y + bird.height > canvas.height || bird.y < 0) {
+    gameRunning = false; // Bird hit the ground or flew too high
   }
 
-  if (pipes.length > 0 && pipes[0].x + pipeWidth < 0) {
-    pipes.shift();
-  }
-
-  if (pipes.length < 1 || pipes[pipes.length - 1].x < canvas.width - 200) {
+  // Pipes logic
+  if (Date.now() - lastPipeTime > pipeInterval) {
     createPipe();
+    lastPipeTime = Date.now();
+  }
+
+  pipes.forEach((pipe, index) => {
+    pipe.x -= 2; // Move pipes left
+
+    // Check for collisions
+    if (
+      isColliding(bird, { x: pipe.x, y: 0, width: pipe.width, height: pipe.y }) ||
+      isColliding(
+        bird,
+        { x: pipe.x, y: pipe.y + 150, width: pipe.width, height: canvas.height }
+      )
+    ) {
+      gameRunning = false;
+    }
+
+    // Remove off-screen pipes and update score
+    if (pipe.x + pipe.width < 0) {
+      pipes.splice(index, 1);
+      score++;
+    }
+  });
+
+  render();
+
+  if (gameRunning) {
+    requestAnimationFrame(update);
   }
 }
 
-function drawPipes() {
-  ctx.fillStyle = "green";
-  for (var i = 0; i < pipes.length; i++) {
-    var pipe = pipes[i];
+// Draw game
+function render() {
+  ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 
-    ctx.fillRect(pipe.x, 0, pipeWidth, pipe.gapY);
-    ctx.fillRect(pipe.x, pipe.gapY + pipeGap, pipeWidth, canvas.height - pipe.gapY - pipeGap);
-  }
+  // Draw pipes
+  pipes.forEach((pipe) => {
+    ctx.drawImage(pipeTopImg, pipe.x, pipe.y - pipeTopImg.height);
+    ctx.drawImage(pipeBottomImg, pipe.x, pipe.y + 150);
+  });
+
+  // Draw bird
+  ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+
+  // Draw score box
+  ctx.drawImage(scoreBoxImg, 10, 10, 100, 50);
+
+  // Display score
+  ctx.font = '24px Arial';
+  ctx.fillStyle = 'white';
+  ctx.fillText(`Score: ${score}`, 20, 40);
 }
 
-restartButton.addEventListener("click", function () {
-  isGameOver = false;
-  block.x = 50;
-  block.y = canvas.height - 290;
-  block.velocityY = 0;
-  pipes = [];
-  score = 0;
-  restartButton.style.display = "none";
-  createPipe();
-  updateGame();
+// Flap the bird
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    bird.velocity = bird.lift;
+  }
 });
 
-
-function updateGame() {
-  if (isGameOver) {
-    onAuthStateChanged(auth, (user) => {
-      let userId = user ? user.uid : null;
-      displayGameOver(userId);
-    });
-    return;
-  }
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  updatePipes();
-  drawPipes();
-
-  block.velocityY += block.gravity;
-  block.y += block.velocityY;
-  drawBlock();
-
-  drawScore();
-
-  checkCollision();
-
-  requestAnimationFrame(updateGame);
-}
-
-window.addEventListener("keydown", moveBlock);
-
-createPipe();
-updateGame();
+// Start the game
+update();

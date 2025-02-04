@@ -5,19 +5,18 @@
   font-style: normal;
 }
 
-.Gamebase{
-  height: 512px;
-  width: 288px;
-  border-style: solid;
-  color: Black;
+.Gamebase {
+  border: 2px solid red;
+  display: block;
+  margin: 0 auto;
+  background-color: lightblue; /* Optional: Hintergrundfarbe */
 }
 
-.main{
+.main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 30px;
 }
 
 h1 {
@@ -26,16 +25,23 @@ h1 {
   color: black; /* Optional: Textfarbe */
 }
 
-.headbar{
+.headbar {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: lightgray; /* Optional: Hintergrundfarbe */
+  padding: 10px;
 }
 
-.sides{
-  border-style: solid;
-    height: 512px;
-    width: 400px;
-    justify-items: center;
-    padding-top: 20px;
+.sides {
+  border: 2px solid black;
+  height: 512px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  padding-top: 20px;
+  background: url('/mnt/data/Logo5-1.png.png') no-repeat center center;
+  background-size: cover;
 }
