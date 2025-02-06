@@ -36,57 +36,39 @@ let gravity = 0.4;
 let gameOver = false;
 let score = 0;
 
-
-let gameStarted = false;
-
-
 window.onload = function() {
-    const startScreen = document.getElementById("start-screen");
-    const playButton = document.getElementById("play-button");
-
-    playButton.addEventListener("click", () => {
-        if (!gameStarted) {
-            startScreen.style.display = "none"; // Verstecke den Startbildschirm
-            initializeGame(); // Starte das Spiel
-            gameStarted = true;
-        }
-    });
-    
-    document.addEventListener("keydown", (event) => {
-        if ((event.key === " " || event.code === "Space") && !gameStarted) {
-            startScreen.style.display = "none"; // Verstecke den Startbildschirm
-            initializeGame(); // Starte das Spiel
-            gameStarted = true;
-        }
-    });
-}
-
-function initializeGame() {
     board = document.getElementById("board");
     board.height = boardHeight;
     board.width = boardWidth;
-    context = board.getContext("2d");
+    context = board.getContext("2d"); //used for drawing on the board
 
+    //draw flappy bird
+    // context.fillStyle = "green";
+    // context.fillRect(bird.x, bird.y, bird.width, bird.height);
+
+    //load images
     birdImg = new Image();
-    birdImg.src = "./BitBird.png";
+    birdImg.src = "./flappybird.png";
     birdImg.onload = function() {
         context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
-    };
+    }
 
     topPipeImg = new Image();
     topPipeImg.src = "./skyscrapertop.png";
+
     bottomPipeImg = new Image();
     bottomPipeImg.src = "./skyscraperbot.png";
 
     requestAnimationFrame(update);
-    setInterval(placePipes, 1500);
+    setInterval(placePipes, 1500); //every 1.5 seconds
     document.addEventListener("keydown", moveBird);
 }
 
 function update() {
     requestAnimationFrame(update);
     if (gameOver) {
-        return; // Entferne den Soundaufruf
+        document.getElementById("deathSound").play();
+        return;
     }
     context.clearRect(0, 0, board.width, board.height);
     
@@ -180,6 +162,9 @@ function update() {
     if (gameOver) {
         drawGameOverText();
     }
+
+
+
 }
 
 function placePipes() {

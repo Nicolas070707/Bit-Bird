@@ -1,20 +1,11 @@
 body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: grey; /* Hintergrundfarbe für den Rest des Bildschirms */
-  height: 100vh;
+    font-family:'Courier New', Courier, monospace;
+    text-align: center;
 }
 
-
-
 #board {
-  background-image: url("./City5.png");
-  display: block;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Schatten */
+    /* background-color: skyblue; */
+    background-image: url("./City5.png");
 }
 
 @font-face {
@@ -24,6 +15,12 @@ body {
     font-style: normal;
   }
   
+  .main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px;
+  }
   
   h1 {
     font-family: 'CustomFont', sans-serif; /* Schriftart anwenden */
@@ -38,87 +35,17 @@ body {
     background-color: lightgray; /* Optional: Hintergrundfarbe */
     padding: 10px;
   }
-
-
-.game-container {
-    position: relative; /* Relativer Container für die Canvas */
+  
+  .sides {
+    border: 2px solid black;
+    height: 512px;
+    width: 400px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    width: 100%;
-    height: 100%;
-}
-
-#start-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  background-image: url(titel.gif);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding-top: 20px; /* Platz oberhalb des Logos */
-}
-
-#start-screen p {
-  font-family: 'CustomFont', sans-serif;
-  font-size: 30px;  /* Schriftgröße anpassen */
-  color: white;  /* Textfarbe */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Schatten für besseren Kontrast */
-  margin-top: 20px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-#start-screen p:hover {
-  transform: scale(1.1); /* Vergrößern bei Hover */
-}
-
-#play-button {
-  width: 150px;
-  height: auto;
-  cursor: pointer;
-  top: 0%;
-  transition: transform 0.3s ease;
-}
-
-#play-button:hover {
-  transform: scale(1.1);  /* Button vergrößern bei Hover */
-}
-
-
-
-
-#start-image {
-  width: 800px; /* Kleinere Breite für das Logo */
-  height: auto;
-  margin-bottom: 0px;
-  padding-top: 0%;
-  animation: zoom-in 2s ease-in-out;
-}
-
-@keyframes zoom-in {
-  0% {
-    transform: scale(0.8); /* Start mit kleinerem Bild */
-    opacity: 0; /* Unsichtbar zu Beginn */
+    justify-content: start;
+    padding-top: 20px;
+    background: url('/mnt/data/Logo5-1.png.png') no-repeat center center;
+    background-size: cover;
   }
-  100% {
-    transform: scale(1); /* Normale Größe */
-    opacity: 1; /* Sichtbar */
-  }
-}
-
-#play-button {
-  width: 150px; /* Feste Breite für den Button */
-  height: auto; /* Höhe bleibt proportional */
-  cursor: pointer; /* Zeigt an, dass es klickbar ist */
-  top: 0%;
-}
+  

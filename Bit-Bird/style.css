@@ -103,3 +103,82 @@ a:hover {
   opacity: 0; 
 }
 
+/* Media Queries für verschiedene Bildschirmgrößen */
+
+/* Für sehr große Bildschirme (größer als 1920px) */
+@media (min-width: 1921px) {
+  .login-container {
+    max-width: 800px;
+    padding: 30px;
+  }
+
+  .login-container h1 {
+    font-size: 8vh;
+  }
+
+  .button-52 {
+    font-size: 1.2rem;
+    padding: 15px 20px;
+  }
+
+  a {
+    font-size: 1.2rem;
+  }
+}
+
+/* Für mittelgroße Bildschirme (1920px bis 1024px) */
+@media (max-width: 1920px) and (min-width: 1024px) {
+  .login-container {
+    width: 70%;
+  }
+
+  .login-container h1 {
+    font-size: 8vh;
+  }
+
+  .button-52 {
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
+}
+
+/* Für kleine Bildschirme (1023px bis 480px) */
+@media (max-width: 1023px) {
+  .login-container {
+    width: 90%;
+    margin-top: 10%;
+  }
+
+  .login-container h1 {
+    font-size: 4.5vh;
+  }
+
+  .button-52 {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+  }
+
+  a {
+    font-size: 0.9rem;
+  }
+}
+
+/* Für sehr kleine Bildschirme (480px und kleiner) */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 15px;
+  }
+
+  .login-container h1 {
+    font-size: 4vh;
+  }
+
+  .button-52 {
+    font-size: 0.8rem;
+    padding: 6px 8px;
+  }
+
+  a {
+    font-size: 0.8rem;
+  }
+}

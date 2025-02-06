@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bit_Bird</title>
-    <link rel="stylesheet" href="../style/style.css">
-    <script src="../script/game.js" type="module" defer></script> 
-    <script src="../script/score.js" defer type="module"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flappy Bird</title>
+  <link rel="stylesheet" href="../style/style.css">
+  <script src="../script/game.mjs" type="module"></script>
+  <script src="../script/score.mjs" type="module" defer></script>
+  <audio id="deathSound" src="./deathSound.mp3" preload="auto"></audio>
+  <audio id="background-music" loop>
+    <source src="../game/Pixel Dreams.mp3" type="audio/mp3">
+</audio>
 </head>
 <body>
-    <div class="headbar">
-        <h1>Bit-Bird</h1>
-    </div>
-    <div class="main">
-        <div class="sides" id="score-display">
-            <img src="/mnt/data/Logo5-1.png.png" alt="Score Box Background" style="width: 100%; height: auto;">
-            <span id="score-text">Loading scores...</span>
-        </div>
-        <canvas class="Gamebase" id="gameCanvas" width="800" height="600"></canvas>
-        <div class="sides">
-        </div>
-    </div>
+  <div class="main">
+    <div class="side1" id="score-display">
+        <span id="score-text">Loading scores...</span>
+      </div>
+    <canvas id="board"></canvas>
+    <div class="side2" id="player-display">
+        <span>Loading Playserdata....</span>
+      </div>
+  </div>
 </body>
 </html>

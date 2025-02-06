@@ -1,15 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
+
+body {
+  display: flex;
+  justify-content: center; /* Zentriert das Spiel horizontal */
+  align-items: center; /* Zentriert das Spiel vertikal */
+  height: 100vh;
+  margin: 0;
+  background: url('../game/Str.jpg')  center center;
+
+}
+
+.main {
+  position: relative;
+}
+
+#score-text {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+canvas#board {
+  width: 288px; /* Feste Breite für das Spiel */
+  height: 512px; /* Feste Höhe für das Spiel */
+  background-color: #ddd; /* Hintergrundfarbe des Spiels */
+}
+
+#board {
+  background-image: url("../game/City5.png");
+  background-size: cover; /* Passt das Hintergrundbild an */
+  width: 100%; /* Breite passt sich an den Container an */
+  height: 100%; /* Höhe passt sich an */
+}
+
 @font-face {
   font-family: 'CustomFont'; /* Name, den du der Schriftart gibst */
   src: url('fonts/PublicPixel-rv0pA.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
-}
-
-.Gamebase {
-  border: 2px solid red;
-  display: block;
-  margin: 0 auto;
-  background-color: lightblue; /* Optional: Hintergrundfarbe */
 }
 
 .main {
@@ -33,15 +63,98 @@ h1 {
   padding: 10px;
 }
 
-.sides {
-  border: 2px solid black;
-  height: 512px;
-  width: 400px;
+.side1{
+  border: 1px solid white;
+  height: 300px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  padding-top: 20px;
-  background: url('/mnt/data/Logo5-1.png.png') no-repeat center center;
+  background: url('../game/Str.jpg') no-repeat center center;
   background-size: cover;
+  margin-right: 10%;
+  font-family: "Pixelify Sans", serif;
+  color: white;
+  text-decoration: none;
+  
+  /* 3D-Effekt hinzufügen */
+  position: relative;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Schatten für den 3D-Effekt */
+  transform: perspective(500px) rotateY(10deg); /* Perspektive und Drehung */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation für fließende Übergänge */
+}
+
+.side1:hover {
+  transform: perspective(500px) rotateY(0deg) scale(1.05); /* Stärkere Drehung nach rechts bei Hover */
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.6); /* Intensiverer Schatten bei Hover */
+}
+
+.side2{
+  border: 1px solid white;
+  height: 300px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  background: url('../game/Str.jpg') no-repeat center center;
+  background-size: cover;
+  margin-left: 10%;
+  font-family: "Pixelify Sans", serif;
+  color: white;
+  text-decoration: none;
+  
+  /* 3D-Effekt hinzufügen */
+  position: relative;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Schatten für den 3D-Effekt */
+  transform: perspective(500px) rotateY(-10deg); /* Perspektive und Drehung */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation für fließende Übergänge */
+}
+
+.side2:hover {
+  transform: perspective(500px) rotateY(0deg) scale(1.05); /* Stärkere Drehung nach rechts bei Hover */
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.6); /* Intensiverer Schatten bei Hover */
+}
+
+.start-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #ff9800;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: none; /* Standardmäßig unsichtbar */
+  z-index: 1000; /* Über allem anderen */
+}
+
+.start-button:hover {
+  background-color: #e68a00;
+}
+
+.goat {
+  color: gold; /* Goldene Farbe für GOAT */
+}
+
+.button-52 {
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 5px 10px 10px;
+  outline: 0;
+  border: 1px solid white;
+  background-color: black;
+  margin-bottom: 5px;
+  color: black;
+  font-family: "Pixelify Sans", serif;
+  border-radius: 8px;
+  color: white;
+}
+
+.button-52:hover{
+  color: yellow;
 }
