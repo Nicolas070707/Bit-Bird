@@ -65,43 +65,70 @@ let gravity = 0.4;
 let gameOver = false;
 let score = 0;
 
+let gameStarted = false;
+
 window.onload = function () {
   board = document.getElementById("board");
 
+  const startScreen = document.getElementById("start-screen");
+  const playButton = document.getElementById("play-button");
   const music = document.getElementById('background-music');
-  music.play();
   
-  function resizeCanvas() {
-    board.width = (window.innerWidth, boardWidth);
-    board.height = (window.innerHeight, boardHeight);
-    
 
-    bird.x = board.width / 8;
-    bird.y = board.height / 2;
+  playButton.addEventListener("click", () => {
+    if (!gameStarted) {
+        startScreen.style.display = "none"; // Verstecke den Startbildschirm
+        startGame(); // Starte das Spiel
+        gameStarted = true;
+        music.play();
+    }
+});
+
+function startGameFromInput() {
+  if (!gameStarted) {
+      startScreen.style.display = "none"; // Verstecke den Startbildschirm
+      startGame();
+      gameStarted = true;
+      music.play();
   }
+}
+
+playButton.addEventListener("click", startGameFromInput);
+
+// Auch Start mit der Leertaste ermöglichen
+document.addEventListener("keydown", (event) => {
+  if (event.code === "Space") {
+      startGameFromInput();
+  }
+});
+
+
+function resizeCanvas() {
+  board.width = boardWidth;
+  board.height = boardHeight;
+  bird.x = board.width / 8;
+  bird.y = board.height / 2;
+}
 
   resizeCanvas(); 
   window.addEventListener("resize", resizeCanvas); 
   
   context = board.getContext("2d");
-  context = board.getContext("2d"); 
-
  
   birdImg = new Image();
-  birdImg.src = "../game/flappybird.png";
+  birdImg.src = "../Texturen/BitBird.png";
   birdImg.onload = function () {
     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
   };
 
   topPipeImg = new Image();
-  topPipeImg.src = "../game/skyscrapertop.png";
+  topPipeImg.src = "../Texturen/skyscrapertop.png";
 
   bottomPipeImg = new Image();
-  bottomPipeImg.src = "../game/skyscraperbot.png";
+  bottomPipeImg.src = "../Texturen/skyscraperbot.png";
 
   document.addEventListener("keysdown", startGame)
-  requestAnimationFrame(update);
-  setInterval(placePipes, 1500); 
+
   document.addEventListener("keydown", moveBird);
 
   onAuthStateChanged(auth, (user) => {
@@ -113,13 +140,15 @@ window.onload = function () {
   });
 };
 
-function startGame(event){
-  if(!gameStarted && (event.code === "Space" || event.code === "ArrowUp" || event.code === "KeyX")) {
-    gameOver = false;
-    score = 0;
-    gravity = 0.4;
-    requestAnimationFrame(update);
-  }
+function startGame(){
+  gameOver = false;
+  score = 0;
+  pipeArray = []; // Entferne vorherige Pipes
+  bird.y = birdY;
+  velocityY = 0;
+  
+  requestAnimationFrame(update);
+  setInterval(placePipes, 1500);
 }
 
 function update() {
@@ -204,7 +233,7 @@ function update() {
       }
     } else {
       fadeOpacity -= 0.01;
-      if (fadeOpacity <= 0) {
+      if (fadeOpacity <= 0 && !fadeIn) {
         cancelAnimationFrame(drawGameOverText); 
         return; 
       }

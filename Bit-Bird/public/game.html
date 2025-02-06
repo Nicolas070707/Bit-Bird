@@ -7,12 +7,16 @@
   <link rel="stylesheet" href="../style/style.css">
   <script src="../script/game.mjs" type="module"></script>
   <script src="../script/score.mjs" type="module" defer></script>
-  <audio id="deathSound" src="./deathSound.mp3" preload="auto"></audio>
   <audio id="background-music" loop>
-    <source src="../game/Pixel Dreams.mp3" type="audio/mp3">
+    <source src="../Texturen/Pixel Dreams.mp3" type="audio/mp3">
 </audio>
 </head>
 <body>
+  <div id="start-screen">
+    <img id="start-image" src="../Texturen/BBLogo.png" alt="Startbild">
+    <img id="play-button" src="../Texturen/StartButton.png" alt="Play Button">
+    <p>Press space to Start</p>
+</div>
   <div class="main">
     <div class="side1" id="score-display">
         <span id="score-text">Loading scores...</span>

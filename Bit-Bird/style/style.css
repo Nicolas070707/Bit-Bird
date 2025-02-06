@@ -7,7 +7,7 @@ body {
   align-items: center; /* Zentriert das Spiel vertikal */
   height: 100vh;
   margin: 0;
-  background: url('../game/Str.jpg')  center center;
+  background: url('../Texturen/Str.jpg')  center center;
 
 }
 
@@ -29,17 +29,10 @@ canvas#board {
 }
 
 #board {
-  background-image: url("../game/City5.png");
+  background-image: url("../Texturen/City5.png");
   background-size: cover; /* Passt das Hintergrundbild an */
   width: 100%; /* Breite passt sich an den Container an */
   height: 100%; /* Höhe passt sich an */
-}
-
-@font-face {
-  font-family: 'CustomFont'; /* Name, den du der Schriftart gibst */
-  src: url('fonts/PublicPixel-rv0pA.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
 }
 
 .main {
@@ -71,7 +64,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  background: url('../game/Str.jpg') no-repeat center center;
+  background: url('../Texturen/Str.jpg') no-repeat center center;
   background-size: cover;
   margin-right: 10%;
   font-family: "Pixelify Sans", serif;
@@ -98,7 +91,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  background: url('../game/Str.jpg') no-repeat center center;
+  background: url('../Texturen/Str.jpg') no-repeat center center;
   background-size: cover;
   margin-left: 10%;
   font-family: "Pixelify Sans", serif;
@@ -158,3 +151,78 @@ h1 {
 .button-52:hover{
   color: yellow;
 }
+
+#start-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  background-image: url(../Texturen/titel.gif);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding-top: 20px; /* Platz oberhalb des Logos */
+}
+
+#start-screen p {
+  font-family: 'CustomFont', sans-serif;
+  font-size: 30px;  /* Schriftgröße anpassen */
+  color: white;  /* Textfarbe */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Schatten für besseren Kontrast */
+  margin-top: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+ 
+#start-screen p:hover {
+  transform: scale(1.1); /* Vergrößern bei Hover */
+}
+ 
+#play-button {
+  width: 150px;
+  height: auto;
+  cursor: pointer;
+  top: 0%;
+  transition: transform 0.3s ease;
+}
+ 
+#play-button:hover {
+  transform: scale(1.1);  /* Button vergrößern bei Hover */
+}
+ 
+ 
+ 
+ 
+#start-image {
+  width: 800px; /* Kleinere Breite für das Logo */
+  height: auto;
+  margin-bottom: 0px;
+  padding-top: 0%;
+  animation: zoom-in 2s ease-in-out;
+}
+ 
+@keyframes zoom-in {
+  0% {
+    transform: scale(0.8); /* Start mit kleinerem Bild */
+    opacity: 0; /* Unsichtbar zu Beginn */
+  }
+  100% {
+    transform: scale(1); /* Normale Größe */
+    opacity: 1; /* Sichtbar */
+  }
+}
+ 
+#play-button {
+  width: 150px; /* Feste Breite für den Button */
+  height: auto; /* Höhe bleibt proportional */
+  cursor: pointer; /* Zeigt an, dass es klickbar ist */
+  top: 0%;
+}
+ 
