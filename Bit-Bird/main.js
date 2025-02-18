@@ -1,24 +1,16 @@
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  get,
-} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-  databaseURL: import.meta.env.VITE_DATABASE_URL,
-  projectId: import.meta.env.VITE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APP_ID,
-  measurementId: import.meta.env.VITE_MEASUREMENT_ID,
+  apiKey: "AIzaSyCs0sQ_kO3m5JATqAA-tojCpSElMQnqvlI",
+  authDomain: "bit-bird-8d89c.firebaseapp.com",
+  databaseURL: "https://bit-bird-8d89c-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "bit-bird-8d89c",
+  storageBucket: "bit-bird-8d89c.firebasestorage.app",
+  messagingSenderId: "902957493686",
+  appId: "1:902957493686:web:7b085d35862317b78d2517",
+  measurementId: "G-EBELKBFYPH"
 };
 
 const app = initializeApp(firebaseConfig);
