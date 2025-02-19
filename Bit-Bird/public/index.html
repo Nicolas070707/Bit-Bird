@@ -1,226 +1,89 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bit-Bird</title>
-    
-    <!-- Firebase Core -->
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"></script>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
 
-    <!-- Eigener Code -->
-    <script type="module" src="main.js" defer></script>
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/11.3.1/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/11.3.1/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/11.3.1/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/11.3.1/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/11.3.1/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/11.3.1/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/11.3.1/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/11.3.1/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/11.3.1/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/11.3.1/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
 
-    <!-- Styles -->
-    
-</head>
-<body>
-    <div class="login-container">
-        <h1>LOGIN</h1>
-        <form id="login-form">
-            <div>
-                <input type="email" id="email" placeholder="E-Mail" required>
-            </div>
-            <div>
-                <input type="password" id="password" placeholder="Passwort" required>
-            </div>
-            <div>
-                <button class="button-52" type="submit">Login</button>
-                <button onclick="window.location.href='./sign.html'" type="button" class="button-52">Register</button>
-            </div>
-            <a onclick="window.location.href='./password_reset.html'">Forgot password</a>
-        </form>
-        <div id="error-message" class="message-box"></div>
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="message">
+      <h2>Welcome</h2>
+      <h1>Firebase Hosting Setup Complete</h1>
+      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
+      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div>
-</body>
+    <p id="load">Firebase SDK Loading&hellip;</p>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadEl = document.querySelector('#load');
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+          let features = [
+            'auth', 
+            'database', 
+            'firestore',
+            'functions',
+            'messaging', 
+            'storage', 
+            'analytics', 
+            'remoteConfig',
+            'performance',
+          ].filter(feature => typeof app[feature] === 'function');
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
+  </body>
 </html>
-
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
-
-body {
-  display: flex;
-  background-image: url(/Texturen/Logo6.png);
-  background-repeat: no-repeat;
-  background-size:  100%;
-  background-image: center;
-  background-color: black;
-  justify-content: center;
-}
-
-.login-container {
-  border-radius: 10px;
-  box-shadow: 0px 0px 20px rgba(0, 0,0, 0);
-  height: auto;
-  width: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 5%;
-}
-
-.login-container h1 {
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 40px;
-  font-family: "Pixelify Sans", serif;
-}
-
-.login-container input[type="text"],
-.login-container input[type="email"],
-.login-container input[type="password"] {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  font-size:14px;
-  font-family: "Pixelify Sans", serif;
-}
-
-.button-52 {
-  font-size: 14px;
-  letter-spacing: 1px;
-  padding: 5px 10px 10px;
-  outline: 0;
-  border: 1px solid black;
-  background-color: black;
-  margin-bottom: 5px;
-  color: white;
-  font-family: "Pixelify Sans", serif;
-  border-radius: 8px;
-}
-
-.button-52:hover{
-  color: yellow;
-  cursor: pointer;
-}
-
-    
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-a {
-  font-size: 14px;
-  display: inline-block;
-  padding: 3px;
-  color: white; 
-  font-family: "Pixelify Sans", serif;
-  background-color: black;
-  border-radius: 4px;
-}
-
-a:hover {
-  color: Yellow; 
-  cursor: pointer;
-}
-
-.message-box {
-  opacity: 0;
-  background-color: black;
-  transition: opacity 0.5s ease; 
-  display: none; 
-  border-radius: 4px;
-  margin: 3px;
-  padding: 3px;
-  font-size: 14px;
-  font-weight: bold;
-  font-family: "Pixelify Sans", serif;
-}
-
-.message-box.show {
-  display: block; 
-  opacity: 1; 
-}
-
-.message-box.hide {
-  opacity: 0; 
-}
-
-/* Media Queries für verschiedene Bildschirmgrößen */
-
-/* Für sehr große Bildschirme (größer als 1920px) */
-@media (min-width: 1921px) {
-  .login-container {
-    max-width: 800px;
-    padding: 30px;
-  }
-
-  .login-container h1 {
-    font-size: 8vh;
-  }
-
-  .button-52 {
-    font-size: 1.2rem;
-    padding: 15px 20px;
-  }
-
-  a {
-    font-size: 1.2rem;
-  }
-}
-
-/* Für mittelgroße Bildschirme (1920px bis 1024px) */
-@media (max-width: 1920px) and (min-width: 1024px) {
-  .login-container {
-    width: 70%;
-  }
-
-  .login-container h1 {
-    font-size: 8vh;
-  }
-
-  .button-52 {
-    font-size: 1rem;
-    padding: 10px 15px;
-  }
-}
-
-/* Für kleine Bildschirme (1023px bis 480px) */
-@media (max-width: 1023px) {
-  .login-container {
-    width: 90%;
-    margin-top: 10%;
-  }
-
-  .login-container h1 {
-    font-size: 4.5vh;
-  }
-
-  .button-52 {
-    font-size: 0.9rem;
-    padding: 8px 10px;
-  }
-
-  a {
-    font-size: 0.9rem;
-  }
-}
-
-/* Für sehr kleine Bildschirme (480px und kleiner) */
-@media (max-width: 480px) {
-  .login-container {
-    padding: 15px;
-  }
-
-  .login-container h1 {
-    font-size: 4vh;
-  }
-
-  .button-52 {
-    font-size: 0.8rem;
-    padding: 6px 8px;
-  }
-
-  a {
-    font-size: 0.8rem;
-  }
-}
-
-</style>
